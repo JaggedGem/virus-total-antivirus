@@ -34,7 +34,7 @@ The following behaviors are considered unacceptable within our community:
 
 ## Enforcement
 
-If you believe that someone is violating this code of conduct or have witnessed unacceptable behavior, please report it to the project maintainers at [[jagged.gem.work@gmail.com](mailto:jagged.gem.work@gmail.com)]. All complaints will be reviewed and investigated, and appropriate action will be taken as necessary.
+If you believe that someone is violating this code of conduct or have witnessed unacceptable behavior, please report it to the project maintainers at [jagged.gem.work@gmail.com](mailto:jagged.gem.work@gmail.com)]. All complaints will be reviewed and investigated, and appropriate action will be taken as necessary.
 
 The project maintainers are responsible for clarifying the standards of acceptable behavior and are expected to take appropriate and fair actions in response to violations of this code.
 
