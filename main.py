@@ -1,3 +1,5 @@
+import json
+
 # Import the requests library
 import requests
 
@@ -16,8 +18,12 @@ import os
 # Import the time library
 import time
 
+# Load the configuration data from the config.json file
+with open("config.json", "r") as f:
+    data = json.load(f)
+
 # Define the VirusTotal API key
-api_key = "APIKEY"
+api_key = data["api_key"]
 
 # Define the headers for the request
 headers = {"x-apikey": api_key}

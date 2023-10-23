@@ -3,11 +3,14 @@ import os
 import subprocess
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+import json
 
+# Load the configuration data from the config.json file
+with open("config.json", "r") as f:
+    data = json.load(f)
+    
 # Paths to watch (Downloads and Desktop folders)
-WATCH_PATHS = [
-    "Put all the paths you want to watch here"
-]
+WATCH_PATHS = data["watch_paths"]
 
 class FileEventHandler(FileSystemEventHandler):
     def on_created(self, event):
