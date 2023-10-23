@@ -32,19 +32,19 @@ If you want to contribute code to the project, please follow these steps:
 1.  Fork the repository to your GitHub account.
     
 2.  Clone your fork to your local development environment:
-    
+```bash    
 git clone https://github.com/your-username/your-project-name.git
-    
+```    
 3.  Create a new branch for your work:
-    
+```bash    
 git checkout -b feature-or-fix-name
-    
+```    
 4.  Make your changes and commit them with clear and concise messages.
     
 5.  Push your changes to your GitHub fork:
-    
+```bash    
 git push origin feature-or-fix-name
-    
+```    
 6.  Create a pull request (PR) to the main repository. Please ensure that your PR includes:
     
     -   A clear and descriptive title.
