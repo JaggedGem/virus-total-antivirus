@@ -38,7 +38,7 @@ python watcher.py
 
 ## Configuration
 
-- Modify the file paths and other settings in the `observer.py` file as needed to customize folder locations and put your [VirusTotal API Key](https://www.virustotal.com/gui/my-apikey) in `main.py`.
+- Put the paths you want the script to watch for new files and put your [VirusTotal API Key](https://www.virustotal.com/gui/my-apikey) in the `config.json` file.
 
 ## Contributing
 

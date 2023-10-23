@@ -1,6 +1,6 @@
 {
     "api_key": "Your Api Key here",
-    "watch_parts": [
+    "watch_paths": [
         "1st path",
         "2nd path",
         "..."
