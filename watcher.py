@@ -59,7 +59,7 @@ if __name__ == "__main__":
     print("Watching specified folders for new files...")
     start_directory_monitoring(DIRECTORIES_TO_MONITOR)
 
-def test_directory_monitoring():
+def run_file_monitoring_tests():
     # Start a download (simulated by a delay)
     time.sleep(2)
 
@@ -73,4 +73,4 @@ def test_directory_monitoring():
 if __name__ == "__main__":
     print("Watching specified folders for new files...")
     initialize_file_monitoring(DIRECTORIES_TO_MONITOR)
-    test_directory_monitoring()
+    run_file_monitoring_tests()
