@@ -30,11 +30,7 @@ class FileEventHandler(FileSystemEventHandler):
             else:
                 return False
         else:
-            return True
-
-    def call_main(self, file_path):
-        subprocess.run(["python", "main.py", file_path])
-
+            return False
 
 def start_file_watcher(paths):
     event_handler = FileEventHandler()
@@ -49,7 +45,6 @@ def start_file_watcher(paths):
             time.sleep(1)
     except KeyboardInterrupt:
         observer.stop()
-
     observer.join()
 
 if __name__ == "__main__":
