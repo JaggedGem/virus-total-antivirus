@@ -30,7 +30,7 @@ class FileEventHandler(FileSystemEventHandler):
             else:
                 return False
         else:
-            return True
+            return False
 
     def call_main(self, file_path):
         subprocess.run(["python", "main.py", file_path])
