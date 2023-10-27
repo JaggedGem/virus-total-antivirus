@@ -9,21 +9,21 @@ import json
 with open("config.json", "r") as f:
     data = json.load(f)
     
-# Paths to watch (Downloads and Desktop folders)
-WATCH_PATHS = ["path_to_downloads_folder", "path_to_desktop_folder"]
-WATCH_PATHS = data["watch_paths"]
+# Paths to be watched (Downloads and Desktop folders)
+PATHS_TO_BE_WATCHED = ["path_to_downloads_folder", "path_to_desktop_folder"]
+PATHS_TO_BE_WATCHED = data["watch_paths"]
 
 class FileEventHandler(FileSystemEventHandler):
     def on_modified(self, event):
         new_file_path = event.src_path
-        if self.is_valid_file(new_file_path):
+        if self.check_file_validity(new_file_path):
             print(f'File modified: {new_file_path}')
-            self.call_main(new_file_path)
+            self.execute_main_script(new_file_path)
 
-    def call_main(self, file_path):
+    def execute_main_script(self, file_path):
         subprocess.run(["python", "main.py", file_path])
 
-    def is_valid_file(self, file_path):
+    def check_file_validity(self, file_path):
         if os.path.exists(file_path):
             if not file_path.endswith(('.tmp', '.crdownload', '.part')):
                 return True
@@ -36,7 +36,7 @@ class FileEventHandler(FileSystemEventHandler):
         subprocess.run(["python", "main.py", file_path])
 
 
-def start_file_watcher(paths):
+def initiate_file_watcher(paths):
     event_handler = FileEventHandler()
     observer = Observer()
     for path in paths:
@@ -54,12 +54,12 @@ def start_file_watcher(paths):
 
 if __name__ == "__main__":
     print("Watching specified folders for new files...")
-    start_file_watcher(WATCH_PATHS)
+    initiate_file_watcher(PATHS_TO_BE_WATCHED)
 if __name__ == "__main__":
     print("Watching specified folders for new files...")
     start_file_watcher(WATCH_PATHS)
 
-def test_file_watcher():
+def test_file_watcher_functionality():
     # Create a test file
     with open("test_file.txt", "w") as f:
         f.write("This is a test file.")
@@ -68,9 +68,9 @@ def test_file_watcher():
     time.sleep(2)
 
     # Check that the file is correctly added to the list of files being watched
-    assert "test_file.txt" in WATCH_PATHS
+    assert "test_file.txt" in PATHS_TO_BE_WATCHED
 
 if __name__ == "__main__":
     print("Watching specified folders for new files...")
     start_file_watcher(WATCH_PATHS)
-    test_file_watcher()
+    test_file_watcher_functionality()
