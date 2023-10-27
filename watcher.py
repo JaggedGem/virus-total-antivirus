@@ -11,7 +11,7 @@ with open("config.json", "r") as f:
     
 # Paths to watch (Downloads and Desktop folders)
 DIRECTORIES_TO_MONITOR = ["path_to_downloads_folder", "path_to_desktop_folder"]
-DIRECTORIES_TO_MONITOR = data["watch_paths"]
+DIRECTORIES_TO_MONITOR = data["directories_to_monitor"]
 
 class FileEventHandler(FileSystemEventHandler):
     def on_modified(self, event):
@@ -32,11 +32,11 @@ class FileEventHandler(FileSystemEventHandler):
         else:
             return True
 
-    def call_main(self, file_path):
+    def execute_main_script(self, file_path):
         subprocess.run(["python", "main.py", file_path])
 
 
-def initialize_file_monitoring(paths):
+def initialize_file_watcher(paths):
     event_handler = FileEventHandler()
     observer = Observer()
     for path in paths:
@@ -57,9 +57,9 @@ if __name__ == "__main__":
     initialize_file_monitoring(DIRECTORIES_TO_MONITOR)
 if __name__ == "__main__":
     print("Watching specified folders for new files...")
-    start_file_watcher(WATCH_PATHS)
+    initialize_file_watcher(DIRECTORIES_TO_MONITOR)
 
-def test_file_monitoring():
+def run_file_watcher_tests():
     # Start a download (simulated by a delay)
     time.sleep(2)
 
