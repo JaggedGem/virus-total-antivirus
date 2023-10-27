@@ -13,15 +13,15 @@ with open("config.json", "r") as f:
 WATCH_PATHS = data["watch_paths"]
 
 class FileEventHandler(FileSystemEventHandler):
-    def on_created(self, event):
+    def on_modified(self, event):
         new_file_path = event.src_path
         if self.is_valid_file(new_file_path):
-            print(f'New file created: {new_file_path}')
+            print(f'File modified: {new_file_path}')
             self.call_main(new_file_path)
 
     def is_valid_file(self, file_path):
         if os.path.exists(file_path):
-            if not file_path.endswith(('.tmp', '.crdownload')):
+            if not file_path.endswith(('.tmp', '.crdownload', '.part')):
                 return True
             else:
                 return False
