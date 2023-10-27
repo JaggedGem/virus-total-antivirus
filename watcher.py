@@ -35,7 +35,6 @@ class FileEventHandler(FileSystemEventHandler):
     def call_main(self, file_path):
         subprocess.run(["python", "main.py", file_path])
 
-
 def initialize_file_monitoring(paths):
     event_handler = FileEventHandler()
     observer = Observer()
@@ -55,9 +54,6 @@ def initialize_file_monitoring(paths):
 if __name__ == "__main__":
     print("Watching specified folders for new files...")
     initialize_file_monitoring(DIRECTORIES_TO_MONITOR)
-if __name__ == "__main__":
-    print("Watching specified folders for new files...")
-    start_file_watcher(WATCH_PATHS)
 
 def test_file_monitoring():
     # Start a download (simulated by a delay)
