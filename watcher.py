@@ -49,15 +49,11 @@ def initialize_file_monitoring(paths):
             time.sleep(1)
     except KeyboardInterrupt:
         observer.stop()
-
     observer.join()
 
 if __name__ == "__main__":
     print("Watching specified folders for new files...")
     initialize_file_monitoring(DIRECTORIES_TO_MONITOR)
-if __name__ == "__main__":
-    print("Watching specified folders for new files...")
-    start_file_watcher(WATCH_PATHS)
 
 def test_file_monitoring():
     # Start a download (simulated by a delay)
