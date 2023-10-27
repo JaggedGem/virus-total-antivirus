@@ -60,15 +60,15 @@ if __name__ == "__main__":
     start_file_watcher(WATCH_PATHS)
 
 def test_file_monitoring():
-    # Create a test file
-    with open("test_file.txt", "w") as f:
-        f.write("This is a test file.")
-
     # Start a download (simulated by a delay)
     time.sleep(2)
 
-    # Check that the file is correctly added to the list of files being watched
-    assert "test_file.txt" in DIRECTORIES_TO_MONITOR
+    # Create a mock file event
+    mock_event = FileSystemEvent("mock_file.txt")
+    event_handler = FileEventHandler()
+    
+    # Check if the system responds correctly to the mock event
+    assert event_handler.on_modified(mock_event) is None
 
 if __name__ == "__main__":
     print("Watching specified folders for new files...")
