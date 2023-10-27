@@ -35,7 +35,6 @@ class FileEventHandler(FileSystemEventHandler):
     def call_main(self, file_path):
         subprocess.run(["python", "main.py", file_path])
 
-
 def initialize_file_monitoring(paths):
     event_handler = FileEventHandler()
     observer = Observer()
