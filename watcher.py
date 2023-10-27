@@ -2,12 +2,25 @@ import time
 import os
 import subprocess
 from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
-import json
+if __name__ == "__main__":
+    print("Watching specified folders for new files...")
+    start_file_watcher(WATCH_PATHS)
 
-# Load the configuration data from the config.json file
-with open("config.json", "r") as f:
-    data = json.load(f)
+def test_file_watcher():
+    # Create a test file
+    with open("test_file.txt", "w") as f:
+        f.write("This is a test file.")
+
+    # Start a download (simulated by a delay)
+    time.sleep(2)
+
+    # Check that the file is correctly added to the list of files being watched
+    assert "test_file.txt" in WATCH_PATHS
+
+if __name__ == "__main__":
+    print("Watching specified folders for new files...")
+    start_file_watcher(WATCH_PATHS)
+    test_file_watcher()
     
 # Paths to watch (Downloads and Desktop folders)
 WATCH_PATHS = ["path_to_downloads_folder", "path_to_desktop_folder"]
