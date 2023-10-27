@@ -16,14 +16,14 @@ DIRECTORIES_TO_MONITOR = data["directories_to_monitor"]
 class FileEventHandler(FileSystemEventHandler):
     def on_modified(self, event):
         new_file_path = event.src_path
-        if self.check_file_validity(new_file_path):
+        if self.is_file_valid(new_file_path):
             print(f'File modified: {new_file_path}')
             self.execute_main_script(new_file_path)
 
     def execute_main_script(self, file_path):
         subprocess.run(["python", "main.py", file_path])
 
-    def is_file_valid(self, file_path):
+    def check_file_validity(self, file_path):
         if os.path.exists(file_path):
             if not file_path.endswith(('.tmp', '.crdownload', '.part')):
                 return True
