@@ -20,6 +20,7 @@ class FileEventHandler(FileSystemEventHandler):
             print(f'File modified: {new_file_path}')
             self.call_main(new_file_path)
 
+    # No changes needed here
     def call_main(self, file_path):
         subprocess.run(["python", "main.py", file_path])
 
@@ -52,9 +53,7 @@ def start_file_watcher(paths):
 
     observer.join()
 
-if __name__ == "__main__":
-    print("Watching specified folders for new files...")
-    start_file_watcher(WATCH_PATHS)
+# Removed duplicate code
 if __name__ == "__main__":
     print("Watching specified folders for new files...")
     start_file_watcher(WATCH_PATHS)
@@ -70,6 +69,7 @@ def test_file_watcher():
     # Check that the file is correctly added to the list of files being watched
     assert "test_file.txt" in WATCH_PATHS
 
+# No changes needed here
 if __name__ == "__main__":
     print("Watching specified folders for new files...")
     start_file_watcher(WATCH_PATHS)
