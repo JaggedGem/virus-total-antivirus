@@ -24,12 +24,25 @@ cd virus-total-antivirus
 pip install -r requirements.txt
 ```
 
+3. (Optional) Create a virtual environment and activate it:
+
+```bash
+python -m venv env
+source env/bin/activate  # On Windows, use `env\Scripts\activate`
+```
+
+4. Install the required packages:
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Usage
 
 1. Run the Python script:
 
 ```bash
-python watcher.py
+python main.py  # or python bundle.py, depending on the main script of the project
 ```
 
 2. The program will automatically monitor the folders specified in the `config.json` file for new files and perform virus scans using the VirusTotal API.
