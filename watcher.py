@@ -33,6 +33,7 @@ class FileEventHandler(FileSystemEventHandler):
             except Exception as e:
                 print(f'Error while processing file: {str(e)}')
                 sys.exit(1)
+    
     def process_files(self):
         file_batch = []
         while not self.file_queue.empty():
