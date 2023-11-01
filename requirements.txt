@@ -1,9 +1,4 @@
 requests==2.31.0
-tkinter==8.6
 watchdog==3.0.0
 hashlib==1.0.2
-json==2.0.9
-os==0.1.1
-sys==1.0.0
-time==1.0.0
 logging==0.5.1.2
