@@ -32,6 +32,65 @@ pip install -r requirements.txt
 python watcher.py
 ```
 
+2. The program will automatically monitor the folders specified in the `config.json` file for new files and perform virus scans using the VirusTotal API.
+
+3. If a virus is detected, a pop-up window will display the file name, number of detections, and options to delete or leave the file.
+
+## To Do List:
+
+- [x] **Improve File Handling:**
+   - [x] Enhance file handling for various file types.
+   - [x] Implement file size restrictions and error handling for large files.
+
+- [x] **Implement GUI for User Interaction:**
+   - [x] Create a graphical user interface (GUI) for better user interaction.
+   - [x] Allow users to easily input file paths and view scan results.
+
+- [x] **Refactor Code for Modularity:**
+   - [x] Refactor the code to improve modularity and reusability.
+   - [x] Split functions into separate modules for better organization.
+
+- [x] **Optimize API Requests:**
+   - [x] Optimize API requests for faster scanning.
+   - [x] Implement batch processing for multiple files.
+
+- [x] **Improve Error Handling:**
+   - [x] Enhance error handling and provide clearer error messages for users.
+
+- [x] **Expand Documentation:**
+   - [x] Expand the README with clearer installation instructions.
+   - [x] Add a comprehensive guide to configuring the `config.json` file.
+
+- [ ] **Implement Logging:**
+   - [ ] Include logging functionality for better tracking and debugging.
+
+- [ ] **Support for Additional Platforms:**
+   - [ ] Ensure compatibility and testing across different operating systems (Windows, macOS, Linux).
+
+- [ ] **Enhance Security Measures:**
+   - [ ] Implement additional security measures and validation checks.
+
+## Configuration
+
+- The `config.json` file should contain your [VirusTotal API Key](https://www.virustotal.com/gui/my-apikey) and the paths you want the script to watch for new files. Here is an example of how the `config.json` file should look:
+
+```json
+{
+    "api_key": "your_virustotal_api_key",
+    "watch_paths": ["path1", "path2", ...]
+}
+```
+
+Replace `"your_virustotal_api_key"` with your actual VirusTotal API key and `"path1", "path2", ...` with the paths you want the script to watch for new files.
+
+## Usage
+
+1. Run the Python script:
+
+```bash
+python watcher.py
+```
+
 2. The program will automatically monitor the specified folders for new files and perform virus scans using the VirusTotal API.
 
 3. If a virus is detected, a pop-up window will display the file name, number of detections, and options to delete or leave the file.
