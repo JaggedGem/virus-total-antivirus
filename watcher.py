@@ -4,6 +4,7 @@ import subprocess
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import json
+import mimetypes
 
 # Load the configuration data from the config.json file
 with open("config.json", "r") as f:
@@ -22,14 +23,27 @@ class FileEventHandler(FileSystemEventHandler):
     def is_valid_file(self, file_path):
         if os.path.exists(file_path):
             if not file_path.endswith(('.tmp', '.crdownload')):
-                return True
+                file_type = mimetypes.guess_type(file_path)[0]
+                if file_type is not None and 'text' in file_type:
+                    file_size = os.path.getsize(file_path)
+                    if file_size <= 5000000:  # 5MB
+                        return True
+                    else:
+                        print(f'File {file_path} is too large. Skipping...')
+                        return False
+                else:
+                    print(f'File {file_path} is not a text file. Skipping...')
+                    return False
             else:
                 return False
         else:
             return True
 
     def call_main(self, file_path):
-        subprocess.run(["python", "main.py", file_path])
+        try:
+            subprocess.run(["python", "main.py", file_path])
+        except Exception as e:
+            print(f'Error processing file {file_path}: {str(e)}')
 
 
 def start_file_watcher(paths):
