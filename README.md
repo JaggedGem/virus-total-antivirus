@@ -29,7 +29,7 @@ pip install -r requirements.txt
 1. Run the Python script:
 
 ```bash
-python watcher.py
+python linker.py
 ```
 
 2. The program will automatically monitor the folders specified in the `config.json` file for new files and perform virus scans using the VirusTotal API.
@@ -88,7 +88,7 @@ Replace `"your_virustotal_api_key"` with your actual VirusTotal API key and `"pa
 1. Run the Python script:
 
 ```bash
-python watcher.py
+python linker.py
 ```
 
 2. The program will automatically monitor the specified folders for new files and perform virus scans using the VirusTotal API.
