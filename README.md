@@ -36,6 +36,39 @@ python watcher.py
 
 3. If a virus is detected, a pop-up window will display the file name, number of detections, and options to delete or leave the file.
 
+## To Do List:
+
+- [ ] **Improve File Handling:**
+   - [ ] Enhance file handling for various file types.
+   - [ ] Implement file size restrictions and error handling for large files.
+
+- [ ] **Implement GUI for User Interaction:**
+   - [ ] Create a graphical user interface (GUI) for better user interaction.
+   - [ ] Allow users to easily input file paths and view scan results.
+
+- [ ] **Refactor Code for Modularity:**
+   - [ ] Refactor the code to improve modularity and reusability.
+   - [ ] Split functions into separate modules for better organization.
+
+- [ ] **Optimize API Requests:**
+   - [ ] Optimize API requests for faster scanning.
+   - [ ] Implement batch processing for multiple files.
+
+- [ ] **Improve Error Handling:**
+   - [ ] Enhance error handling and provide clearer error messages for users.
+
+- [ ] **Expand Documentation:**
+   - [ ] Expand the README with clearer installation instructions.
+   - [ ] Add a comprehensive guide to configuring the `config.json` file.
+
+- [ ] **Implement Logging:**
+   - [ ] Include logging functionality for better tracking and debugging.
+
+- [ ] **Support for Additional Platforms:**
+   - [ ] Ensure compatibility and testing across different operating systems (Windows, macOS, Linux).
+
+- [ ] **Enhance Security Measures:**
+   - [ ] Implement additional security measures and validation checks.
 
 ## Configuration
 
