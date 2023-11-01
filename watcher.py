@@ -5,6 +5,9 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import json
 import mimetypes
+import requests
+import queue
+from threading import Thread
 
 # Load the configuration data from the config.json file
 with open("config.json", "r") as f:
@@ -18,7 +21,14 @@ class FileEventHandler(FileSystemEventHandler):
         new_file_path = event.src_path
         if self.is_valid_file(new_file_path):
             print(f'New file created: {new_file_path}')
-            self.call_main(new_file_path)
+            self.file_queue.put(new_file_path)
+            if self.file_queue.qsize() >= self.batch_size:
+                self.process_files()
+    def process_files(self):
+        file_batch = []
+        while not self.file_queue.empty():
+            file_batch.append(self.file_queue.get())
+        self.call_main(file_batch)
 
     def is_valid_file(self, file_path):
         if os.path.exists(file_path):
@@ -39,11 +49,13 @@ class FileEventHandler(FileSystemEventHandler):
         else:
             return True
 
-    def call_main(self, file_path):
+    def call_main(self, file_batch):
         try:
-            subprocess.run(["python", "main.py", file_path])
+            with requests.Session() as s:
+                for file_path in file_batch:
+                    subprocess.run(["python", "main.py", file_path, s])
         except Exception as e:
-            print(f'Error processing file {file_path}: {str(e)}')
+            print(f'Error processing files: {str(e)}')
 
 
 def start_file_watcher(paths):
