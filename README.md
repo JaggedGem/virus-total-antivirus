@@ -29,7 +29,7 @@ pip install -r requirements.txt
 1. Run the Python script:
 
 ```bash
-python main.py
+python linker.py
 ```
 
 2. The program will automatically monitor the folders specified in the `config.json` file for new files and perform virus scans using the VirusTotal API.
