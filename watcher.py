@@ -88,9 +88,11 @@ def start_file_watcher(paths):
             # Validate user input in the GUI
             if os_name == 'Windows':
                 path = path.replace('/', '\\')
+                os.system('cls')
             elif os_name == 'Linux':
-                # Add Linux-specific code here
-                pass
+                os.system('clear')
+            elif os_name == 'Darwin':
+                os.system('clear')
             elif os_name == 'Darwin':
                 # Add macOS-specific code here
                 pass
