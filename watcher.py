@@ -9,6 +9,9 @@ import requests
 import queue
 from threading import Thread
 import sys
+import re
+from getpass import getpass
+from cryptography.fernet import Fernet
 
 # Load the configuration data from the config.json file
 with open("config.json", "r") as f:
@@ -32,7 +35,10 @@ class FileEventHandler(FileSystemEventHandler):
     def process_files(self):
         file_batch = []
         while not self.file_queue.empty():
-            file_batch.append(self.file_queue.get())
+            file_path = self.file_queue.get()
+            # Sanitize file path
+            file_path = re.sub(r'[<>:"|?*]', '', file_path)
+            file_batch.append(file_path)
         self.call_main(file_batch)
 
     def is_valid_file(self, file_path):
@@ -60,9 +66,13 @@ class FileEventHandler(FileSystemEventHandler):
 
     def call_main(self, file_batch):
         try:
+            # Securely handle API key
+            api_key = getpass("Enter your API key: ")
+            cipher_suite = Fernet(Fernet.generate_key())
+            encrypted_api_key = cipher_suite.encrypt(api_key.encode())
             with requests.Session() as s:
                 for file_path in file_batch:
-                    subprocess.run(["python", "main.py", file_path, s])
+                    subprocess.run(["python", "main.py", file_path, s, encrypted_api_key])
         except Exception as e:
             print(f'Error while running subprocess: {str(e)}')
             sys.exit(1)
@@ -73,8 +83,12 @@ def start_file_watcher(paths):
         event_handler = FileEventHandler()
         observer = Observer()
         for path in paths:
-            observer.schedule(event_handler, path, recursive=True)
-            print(f'Watching folder: {path}')
+            # Validate user input in the GUI
+            if re.match(r'^[a-zA-Z0-9_\-/\\]+$', path):
+                observer.schedule(event_handler, path, recursive=True)
+                print(f'Watching folder: {path}')
+            else:
+                print(f'Invalid path: {path}')
         observer.start()
     except Exception as e:
         print(f'Error while starting file watcher: {str(e)}')
