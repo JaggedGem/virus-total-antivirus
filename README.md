@@ -61,14 +61,14 @@ python watcher.py
    - [x] Expand the README with clearer installation instructions.
    - [x] Add a comprehensive guide to configuring the `config.json` file.
 
-- [ ] **Implement Logging:**
-   - [ ] Include logging functionality for better tracking and debugging.
+- [x] **Implement Logging:**
+   - [x] Include logging functionality for better tracking and debugging.
 
-- [ ] **Support for Additional Platforms:**
-   - [ ] Ensure compatibility and testing across different operating systems (Windows, macOS, Linux).
+- [x] **Support for Additional Platforms:**
+   - [x] Ensure compatibility and testing across different operating systems (Windows, macOS, Linux).
 
-- [ ] **Enhance Security Measures:**
-   - [ ] Implement additional security measures and validation checks.
+- [x] **Enhance Security Measures:**
+   - [x] Implement additional security measures and validation checks.
 
 ## Configuration
 
