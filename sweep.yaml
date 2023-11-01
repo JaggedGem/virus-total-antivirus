@@ -8,7 +8,7 @@ rules:
   - "Use meaningful variable and function names."
   - "Avoid using global variables whenever possible."
   - "Remove unnecessary comments and commented-out code."
-  - "Follow PEP 8 style guide for code formatting."
+  - "Solve any To-Do's in the README.md file."
 
 # This is the branch that Sweep will develop from and make pull requests to. Most people use 'main' or 'master' but some users also use 'dev' or 'staging'.
 branch: 'main'
