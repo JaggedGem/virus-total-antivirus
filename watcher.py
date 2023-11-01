@@ -1,5 +1,6 @@
 import time
 import os
+import platform
 import subprocess
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -82,8 +83,17 @@ def start_file_watcher(paths):
     try:
         event_handler = FileEventHandler()
         observer = Observer()
+        os_name = platform.system()
         for path in paths:
             # Validate user input in the GUI
+            if os_name == 'Windows':
+                path = path.replace('/', '\\')
+            elif os_name == 'Linux':
+                # Add Linux-specific code here
+                pass
+            elif os_name == 'Darwin':
+                # Add macOS-specific code here
+                pass
             if re.match(r'^[a-zA-Z0-9_\-/\\]+$', path):
                 observer.schedule(event_handler, path, recursive=True)
                 print(f'Watching folder: {path}')
