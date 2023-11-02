@@ -24,7 +24,7 @@ def save_settings():
 
     with open("config.json", "w") as config_file:
         json.dump(config_data, config_file, indent=4)
-    
+
     settings_window.destroy()
 
 # Function to start monitoring
