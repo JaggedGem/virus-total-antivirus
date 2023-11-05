@@ -1,16 +1,16 @@
 import logging
 
 # Create a logger
-logger = logging.getLogger(__name__)
+my_logger = logging.getLogger(__name__)
 
-# Set the log level
-logger.setLevel(logging.INFO)
+# Set the log level to DEBUG
+my_logger.setLevel(logging.DEBUG)
 
 # Create a file handler
 handler = logging.FileHandler('app.log')
 
-# Set the log level of the handler
-handler.setLevel(logging.INFO)
+# Set the log level of the handler to DEBUG
+handler.setLevel(logging.DEBUG)
 
 # Create a formatter
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -19,4 +19,4 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 handler.setFormatter(formatter)
 
 # Add the handler to the logger
-logger.addHandler(handler)
+my_logger.addHandler(handler)

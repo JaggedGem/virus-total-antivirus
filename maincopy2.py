@@ -6,6 +6,8 @@ import tkinter as tk
 import os
 import time
 import json_reader
+import inspect
+import subprocess
 
 # Define the VirusTotal API key
 api_key = "6d17bb9fc51673c5d2c73720c7fba28db7be9c4ea818534e0e77c0b7b3ec3649" # api_key
@@ -14,6 +16,44 @@ api_key = "6d17bb9fc51673c5d2c73720c7fba28db7be9c4ea818534e0e77c0b7b3ec3649" # a
 headers = {"x-apikey": api_key}
 
 
+def handle_report(file_report_data, file_path):
+    
+    # Get the current frame
+    current_frame = inspect.currentframe()
+    # Get the outer frame (the caller's frame)
+    outer_frame = inspect.getouterframes(current_frame, 2)
+    # Get the name of the calling function
+    caller_name = outer_frame[1][3]
+    
+    if file_report_data.status_code == 200:
+        if caller_name == 'upload_file_smaller_32':
+            logger.my_logger.info("Got report(<32 MB)")
+        else:
+            logger.my_logger.info("Got report(>32 MB)")
+            
+            
+        file_report_data = file_report_data.json()
+        file_name = os.path.basename(file_path)
+        analysis_report_data = json_reader.reader(file_report_data)
+
+        if analysis_report_data is None:
+            sys.exit(1)
+            
+        elif analysis_report_data == 'queued':
+            if caller_name == 'upload_file_smaller_32':
+                upload_file_smaller_32(file_path)
+            else:
+                upload_file_bigger_32(file_path)
+            
+        else:
+            detections, total = analysis_report_data
+        return (file_name, detections, total)
+    else:
+        logger.my_logger.error("Could not get the analysis report")
+        print("Could not get the analysis report")
+        sys.exit(1)
+
+        
 # Define a function to get the file report by hash
 def get_file_report_by_hash(file_hash, file_path):
     if file_hash is None:
@@ -61,6 +101,7 @@ def get_file_report_by_hash(file_hash, file_path):
             # The file report request failed or there was an error
             logger.my_logger.error("Could not get the file report")
             print("Could not get the file report")
+            subprocess.Popen(["python", "main copy 2.py"])
             sys.exit(1)
 
 # Define a function to upload a file and get the analysis report by ID
@@ -79,59 +120,13 @@ def upload_file_smaller_32(file_path):
         # Send a POST request to the file upload endpoint
         file_upload_response = requests.post(file_upload_url, headers=headers, files=files)
         # Check the status code of the response
-        if file_upload_response.status_code == 200:
-            logger.my_logger.info("File uploaded(<32 MB)")
-            # The file upload was successful
-            # Parse the JSON response
-            file_upload_data = file_upload_response.json()
-            # Get the analysis ID from the response
-            analysis_id = file_upload_data["data"]["id"]
-            # Define the VirusTotal API endpoint for analysis report
-            analysis_report_url = "https://www.virustotal.com/api/v3/analyses/" + analysis_id
-            
-            # Wait for some time for the analysis to complete
-            time.sleep(10)
-            
-            # Send a GET request to the analysis report endpoint
-            file_report_data = requests.get(analysis_report_url, headers=headers)
-            # Check the status code of the response
-            if file_report_data.status_code == 200:
-                logger.my_logger.info("Got report(<32 MB)")
-                # The analysis report was found
-                # Parse the JSON response
-                file_report_data = file_report_data.json()
-                # Get the file name from the response
-                
-                # file_name = analysis_report_data["meta"]["file_info"]["name"]
-                file_name = os.path.basename(file_path)
-                
-                analysis_report_data = json_reader.reader(file_report_data)
-               
-                if analysis_report_data is None:
-                    logger.my_logger.critical("Could not get the analysis report")
-                    print("Could not get the analysis report")
-                    sys.exit(1)
-                
-                elif analysis_report_data == 'queued':
-                    upload_file_smaller_32(file_path)
-                
-                else:
-                    detections, total = analysis_report_data
-                
-                # Return the file name, detections and total as a tuple
-                return (file_name, detections, total)
-            else:
-                # The analysis report was not found or there was an error
-                logger.my_logger.error("Could not get the analysis report")
-                print("Could not get the analysis report")
-                sys.exit(1)
-        else:
-            # The file upload failed or there was an error
-            logger.my_logger.error("Could not upload the file")
-            print("Could not upload the file")
-            sys.exit(1)
+        file_report_data = file_upload_response
+        handled_data = handle_report(file_report_data, file_path)
+        
+        return handled_data
+    
     elif file_size <= 650 * 1024 * 1024:
-        upload_file_bigger_than_32(file_path)
+        upload_file_bigger_32(file_path)
     else:
         # The file size is greater than 650 MB
         logger.my_logger.error("The file is too large to be uploaded to VirusTotal")
@@ -175,34 +170,9 @@ def upload_file_bigger_32(file_path):
             # Send a GET request to the analysis report endpoint
             file_report_data = requests.get(analysis_report_url, headers=headers)
             # Check the status code of the response
-            if file_report_data.status_code == 200:
-                logger.my_logger.info("Got report(>32 MB)")
-                # The analysis report was found
-                # Parse the JSON response
-                file_report_data = file_report_data.json()
-                # Get the file name from the response
-                file_name = os.path.basename(file_path)
-            
-                analysis_report_data = json_reader.reader(file_report_data)
-            
-                if analysis_report_data is None:
-                    logger.my_logger.critical("Could not get the analysis report")
-                    print("Could not get the analysis report")
-                    sys.exit(1)
-                
-                elif analysis_report_data == 'queued':
-                    upload_file_bigger_32(file_path)
-
-                else:
-                    detections, total = analysis_report_data
-                
-                # Return the file name, detections and total as a tuple
-                return (file_name, detections, total)
-            else:
-                # The analysis report was not found or there was an error
-                logger.my_logger.error("Could not get the analysis report")
-                print("Could not get the analysis report")
-                sys.exit(1)
+            handled_data = handle_report(file_report_data, file_path)
+            return handled_data
+        
         else:
             # The file upload failed or there was an error
             logger.my_logger.error("Could not upload the file")
@@ -274,7 +244,7 @@ def main(file_path):
         for _ in range(5):  # Retry 5 times
             try:
                 # Try to upload the file and get the analysis report by ID
-                analysis_report = upload_file_and_get_analysis_report(file_path)
+                analysis_report = upload_file_smaller_32(file_path)
                 break
             except FileNotFoundError:
                 time.sleep(1)  # Wait for 1 second before retrying
@@ -285,7 +255,7 @@ def main(file_path):
         # Check if the analysis report was found
         if analysis_report is not None:
             # Unpack the analysis report tuple
-            file_name, detections, total = analysis_report
+            file_name, detections, total, *_ = analysis_report
         else:
             # No report was found or there was an error
             logger.my_logger.error("Could not get any report")
@@ -293,7 +263,7 @@ def main(file_path):
             sys.exit(1)
 
     # Create a window to display the virus report and the options
-    if detections > 0:
+    if int(detections) > 0:
         create_window(file_path, file_name=file_name, detections=detections, total=total)
     else:
         logger.my_logger.info("No virus was detected")
@@ -304,5 +274,5 @@ def main(file_path):
         
         
 if __name__ == "__main__":
-    file_path = "E:\\Downloads\\ichqlC"
+    file_path = "E:\\Downloads\\1wWJvm"
     main(file_path)
