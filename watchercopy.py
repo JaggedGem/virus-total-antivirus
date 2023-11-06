@@ -135,8 +135,8 @@ def main_watch(WATCH_PATHS):
             
             
 WATCH_PATHS = [
-    "E:\\Downloads\\",
-    "C:\\Users\\orlet\\OneDrive\\Desktop",
+    "path/to/file",
+    "path/to/another/file",
                ]
-# handler = FileEventHandler(1)  # Set batch size to 10
+# handler = FileEventHandler(1)  # Set batch size to 1
 main_watch(WATCH_PATHS)
