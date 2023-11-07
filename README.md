@@ -39,26 +39,25 @@ python linker.py
 ## To Do List:
 
 - [x] **Improve File Handling:**
-   - [x] Enhance file handling for various file types.
-   - [x] Implement file size restrictions and error handling for large files.
+    - [x] Enhance file handling for various file types.
+    - [x] Implement file size restrictions and error handling for large files.
 
 - [x] **Implement GUI for User Interaction:**
-   - [x] Create a graphical user interface (GUI) for better user interaction.
-   - [x] Allow users to easily input file paths and view scan results.
+    - [x] Allow users to easily input file paths and view scan results.
 
 - [x] **Refactor Code for Modularity:**
-   - [x] Refactor the code to improve modularity and reusability.
-   - [x] Split functions into separate modules for better organization.
+    - [x] Refactor the code to improve modularity and reusability.
+    - [x] Split functions into separate modules for better organization.
 
 - [x] **Optimize API Requests:**
-   - [x] Optimize API requests for faster scanning.
-   - [x] Implement batch processing for multiple files.
+    - [x] Optimize API requests for faster scanning.
+    - [x] Implement batch processing for multiple files.
 
 - [x] **Improve Error Handling:**
-   - [x] Enhance error handling and provide clearer error messages for users.
+    - [x] Enhance error handling and provide clearer error messages for users.
 
 - [x] **Expand Documentation:**
-   - [x] Expand the README with clearer installation instructions.
+    - [x] Expand the README with clearer installation instructions.
    - [x] Add a comprehensive guide to configuring the `config.json` file.
 
 - [x] **Implement Logging:**
