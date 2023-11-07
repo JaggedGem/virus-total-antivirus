@@ -36,14 +36,14 @@ python linker.py
 
 3. If a virus is detected, a pop-up window will display the file name, number of detections, and options to delete or leave the file.
 
-## To Do List:
+## Future Improvements:
 
-- [x] **Improve File Handling:**
-   - [x] Enhance file handling for various file types.
-   - [x] Implement file size restrictions and error handling for large files.
+- **Improve File Handling:**
+   - Enhance file handling for various file types.
+   - Implement file size restrictions and error handling for large files.
 
-- [x] **Implement GUI for User Interaction:**
-   - [x] Create a graphical user interface (GUI) for better user interaction.
+- **Implement GUI for User Interaction:**
+   - Create a graphical user interface (GUI) for better user interaction.
    - [x] Allow users to easily input file paths and view scan results.
 
 - [x] **Refactor Code for Modularity:**
@@ -61,51 +61,31 @@ python linker.py
    - [x] Expand the README with clearer installation instructions.
    - [x] Add a comprehensive guide to configuring the `config.json` file.
 
-- [x] **Implement Logging:**
-   - [x] Include logging functionality for better tracking and debugging.
+- **Implement Logging:**
+   - Include logging functionality for better tracking and debugging.
 
-- [x] **Support for Additional Platforms:**
-   - [x] Ensure compatibility and testing across different operating systems (Windows, macOS, Linux).
+- **Support for Additional Platforms:**
+   - Ensure compatibility and testing across different operating systems (Windows, macOS, Linux).
 
-- [x] **Enhance Security Measures:**
-   - [x] Implement additional security measures and validation checks.
+- **Enhance Security Measures:**
+   - Implement additional security measures and validation checks.
 
 ## Configuration
 
 - The `config.json` file should contain your [VirusTotal API Key](https://www.virustotal.com/gui/my-apikey) and the paths you want the script to watch for new files. Here is an example of how the `config.json` file should look:
+   - [x] Create a graphical user interface (GUI) for better user interaction.
+   - [x] Allow users to easily input file paths and view scan results.
 
-```json
-{
-    "api_key": "your_virustotal_api_key",
-    "watch_paths": ["path1", "path2", ...],
-    "log_level": "INFO"
-}
-```
+- **Refactor Code for Modularity:**
+   - Refactor the code to improve modularity and reusability.
+   - Split functions into separate modules for better organization.
 
-Replace `"your_virustotal_api_key"` with your actual VirusTotal API key, `"path1", "path2", ...` with the paths you want the script to watch for new files, and `"log_level"` with your desired log level (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+- **Optimize API Requests:**
+   - Optimize API requests for faster scanning.
+   - Implement batch processing for multiple files.
 
-Replace `"your_virustotal_api_key"` with your actual VirusTotal API key and `"path1", "path2", ...` with the paths you want the script to watch for new files.
+- **Improve Error Handling:**
+   - Enhance error handling and provide clearer error messages for users.
 
-## Usage
-
-1. Run the Python script:
-
-```bash
-python watcher.py
-```
-
-2. The program will automatically monitor the specified folders for new files and perform virus scans using the VirusTotal API.
-
-3. If a virus is detected, a pop-up window will display the file name, number of detections, and options to delete or leave the file.
-
-## Configuration
-
-- Put the paths you want the script to watch for new files and put your [VirusTotal API Key](https://www.virustotal.com/gui/my-apikey) in the `config.json` file.
-
-## Contributing
-
-Contributions are welcome! If you'd like to contribute to this project, please follow the [contributing guidelines](CONTRIBUTING.md).
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
+- **Expand Documentation:**
+   - Expand the README with clearer installation instructions.
