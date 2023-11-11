@@ -1,25 +1,21 @@
-from main import create_window, get_file_report_by_hash, upload_file_and_get_analysis_report
-from watcher import start_file_watcher
 import os
 import json
 import tkinter as tk
 from tkinter import Entry, Label, Button, messagebox
 import sys
 
-# Function to save the API key, watch paths and log level to config.json
+# Function to save the API key and watch paths to config.json
 def save_settings():
     api_key = api_key_entry.get()
     watch_paths = watch_paths_entry.get().split('\n')
-    log_level = log_level_entry.get()
 
-    if not api_key or not watch_paths or not log_level:
-        messagebox.showerror("Error", "API Key, Watch Paths and Log Level are required")
+    if not api_key or not watch_paths:
+        messagebox.showerror("Error", "API Key and Watch Paths are required")
         return
 
     config_data = {
         "api_key": api_key,
-        "watch_paths": watch_paths,
-        "log_level": log_level
+        "watch_paths": watch_paths
     }
 
     with open("config.json", "w") as config_file:
@@ -32,15 +28,7 @@ def start_monitoring():
     if not os.path.exists("config.json"):
         messagebox.showerror("Error", "Config file not found. Please configure settings first.")
         return
-
-    with open("config.json", "r") as f:
-        data = json.load(f)
-
-    api_key = data["api_key"]
-    watch_paths = data["watch_paths"]
-
     print("Starting monitoring...")
-    start_file_watcher(watch_paths)
 
 # Check if config.json is properly configured
 if not os.path.exists("config.json"):

@@ -16,7 +16,7 @@ import hash_calculator
 class FileEventHandler(FileSystemEventHandler):
     def __init__(self, batch_size):
         super().__init__()
-        self.file_queue = Queue()
+        self.file_queue = Queue(5)
         self.batch_size = batch_size
         
     def on_created(self, event):
@@ -44,7 +44,7 @@ class FileEventHandler(FileSystemEventHandler):
     def is_valid_file(self, file_path):
         try:
             if os.path.exists(file_path):
-                if not file_path.endswith(('.tmp', '.crdownload')):
+                if not file_path.endswith(('.tmp', '.crdownload', '.part', '.lock', '.lnk', '.url', '.ini', '.db', '.sys')):
                     file_type = mimetypes.guess_type(file_path)[0]
                     file_size = os.path.getsize(file_path)
                     if file_size <= 650 * 1024 * 1024:  # 650MB
@@ -79,9 +79,8 @@ class FileEventHandler(FileSystemEventHandler):
                 file_hash = hash_calculator.calculate_hash(file_path)
                 def run_and_release(file_path, file_hash):
                     try:
-                        main(file_path=file_path)
-                        exit_code = os.system('python maincopy2.py')
-                        if exit_code == 1:
+                        optional_response = main(file_path=file_path)
+                        if optional_response == 'restart':
                             main(file_path=file_path)
                     finally:
                         # Release the semaphore when the function finishes
@@ -96,7 +95,7 @@ class FileEventHandler(FileSystemEventHandler):
 
 def start_file_watcher(paths):
     try:
-        event_handler = FileEventHandler(1)
+        event_handler = FileEventHandler(5)
         observer = Observer()
         os_name = platform.system()
         for path in paths:
@@ -135,8 +134,8 @@ def main_watch(WATCH_PATHS):
             
             
 WATCH_PATHS = [
-    "path/to/file",
-    "path/to/another/file",
+    "E:\\Downloads\\",
+    "C:\\Users\\orlet\\OneDrive\\Desktop",
                ]
-# handler = FileEventHandler(1)  # Set batch size to 1
+# handler = FileEventHandler(1)  # Set batch size to 10
 main_watch(WATCH_PATHS)

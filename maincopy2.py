@@ -6,49 +6,22 @@ import tkinter as tk
 import os
 import time
 import json_reader
-import inspect
 import subprocess
 
+
 # Define the VirusTotal API key
-api_key = "Your API Key" # api_key
+api_key = "6d17bb9fc51673c5d2c73720c7fba28db7be9c4ea818534e0e77c0b7b3ec3649" # api_key
 
 # Define the headers for the request
 headers = {"x-apikey": api_key}
 
 
-def handle_report(file_report_data, file_path):
-    
-    # Get the current frame
-    current_frame = inspect.currentframe()
-    # Get the outer frame (the caller's frame)
-    outer_frame = inspect.getouterframes(current_frame, 2)
-    # Get the name of the calling function
-    caller_name = outer_frame[1][3]
-    
-    if file_report_data.status_code == 200:
-        if caller_name == 'upload_file_smaller_32':
-            logger.my_logger.info("Got report(<32 MB)")
-        else:
-            logger.my_logger.info("Got report(>32 MB)")
-            
-            
-        file_report_data = file_report_data.json()
+def handle_report(response, file_path):
+    try:
         file_name = os.path.basename(file_path)
-        analysis_report_data = json_reader.reader(file_report_data)
-
-        if analysis_report_data is None:
-            sys.exit(1)
-            
-        elif analysis_report_data == 'queued':
-            if caller_name == 'upload_file_smaller_32':
-                upload_file_smaller_32(file_path)
-            else:
-                upload_file_bigger_32(file_path)
-            
-        else:
-            detections, total = analysis_report_data
+        detections, total = response
         return (file_name, detections, total)
-    else:
+    except Exception as e:
         logger.my_logger.error("Could not get the analysis report")
         print("Could not get the analysis report")
         sys.exit(1)
@@ -73,13 +46,14 @@ def get_file_report_by_hash(file_hash, file_path):
             logger.my_logger.info("File hash report found")
             # The file report was found
             # Parse the JSON response
-            file_report_data = file_report_response.json()
-            # Get the file name from the response
-            # print(file_report_data)
-            # file_name = file_report_data["data"]["attributes"]["names"][0]
+            file_report_data = file_report_response
+
             file_name = os.path.basename(file_path)
 
             analysis_report_data = json_reader.reader(file_report_data)
+            
+            detections, total = None, None
+            
             if analysis_report_data is None:
                 logger.my_logger.critical("Could not get the analysis report")
                 print("Could not get the analysis report")
@@ -101,15 +75,30 @@ def get_file_report_by_hash(file_hash, file_path):
             # The file report request failed or there was an error
             logger.my_logger.error("Could not get the file report")
             print("Could not get the file report")
-            subprocess.Popen(["python", "main copy 2.py"])
+            subprocess.Popen(["python", "maincopy2.py"])
             sys.exit(1)
 
+
+def check_status(file_report_data, file_path, file_hash, analysis_report_url):
+    response = json_reader.reader(file_report_data)
+    # If the analysis is not ready, wait and then retry the GET request
+    if response == 'queued' or response is None:
+        if analysis_report_url is not None:
+            time.sleep(30)
+            return 'restart'
+        else:
+            time.sleep(30)
+            return 'restart'
+    else:
+        return response
+    
+    
 # Define a function to upload a file and get the analysis report by ID
-def upload_file_smaller_32(file_path):
+def upload_file_smaller_32(file_path, file_hash):
 
     # Get the file size in bytes
     file_size = os.path.getsize(file_path)
-
+    print("Uploading file")
     if file_size <= 32 * 1024 * 1024:
         logger.my_logger.info("Uploading file(<32 MB)")
         # The file size is less than or equal to 32 MB
@@ -121,12 +110,26 @@ def upload_file_smaller_32(file_path):
         file_upload_response = requests.post(file_upload_url, headers=headers, files=files)
         # Check the status code of the response
         file_report_data = file_upload_response
-        handled_data = handle_report(file_report_data, file_path)
+        
+        response = check_status(file_report_data, file_path, file_hash, analysis_report_url=None)        
+        if response == 'restart':
+            return 'restart'
+            
+        # Check the status code of the response
+        handled_data = handle_report(response, file_path)
         
         return handled_data
     
     elif file_size <= 650 * 1024 * 1024:
-        upload_file_bigger_32(file_path)
+        
+        response = upload_file_bigger_32(file_path, file_hash)
+        if response == 'restart':
+            return 'restart'
+            
+        # Check the status code of the response
+        handled_data = handle_report(response, file_path)
+        
+        return handled_data
     else:
         # The file size is greater than 650 MB
         logger.my_logger.error("The file is too large to be uploaded to VirusTotal")
@@ -134,7 +137,7 @@ def upload_file_smaller_32(file_path):
         sys.exit(1)
         
         
-def upload_file_bigger_32(file_path):
+def upload_file_bigger_32(file_path, file_hash):
     logger.my_logger.info("Getting upload URL(>32 MB)")
     # The file size is greater than 32 MB and less than or equal to 650 MB
     # Define the VirusTotal API endpoint for upload URL request
@@ -160,17 +163,19 @@ def upload_file_bigger_32(file_path):
             # Parse the JSON response
             upload_url_data = upload_url_response.json()
             # Get the analysis ID from the response
-            analysis_id = upload_url_data.get("data").get("id")
+            analysis_id = upload_url_data.get("data", {}).get("id")
             # Define the VirusTotal API endpoint for analysis report
             analysis_report_url = "https://www.virustotal.com/api/v3/analyses/" + analysis_id
-            
-            # Wait for some time for the analysis to complete
-            time.sleep(20)
-            
+
             # Send a GET request to the analysis report endpoint
             file_report_data = requests.get(analysis_report_url, headers=headers)
+
+            response = check_status(file_report_data, file_path, file_hash, analysis_report_url)      
+            if response == 'restart':
+                return 'restart'      
+            
             # Check the status code of the response
-            handled_data = handle_report(file_report_data, file_path)
+            handled_data = handle_report(response, file_path)
             return handled_data
         
         else:
@@ -244,7 +249,7 @@ def main(file_path):
         for _ in range(5):  # Retry 5 times
             try:
                 # Try to upload the file and get the analysis report by ID
-                analysis_report = upload_file_smaller_32(file_path)
+                analysis_report = upload_file_smaller_32(file_path, file_hash)
                 break
             except FileNotFoundError:
                 time.sleep(1)  # Wait for 1 second before retrying
@@ -253,9 +258,12 @@ def main(file_path):
             return
 
         # Check if the analysis report was found
-        if analysis_report is not None:
+        if analysis_report is not None and \
+        analysis_report != 'restart':
             # Unpack the analysis report tuple
             file_name, detections, total, *_ = analysis_report
+        elif analysis_report == 'restart':
+            return 'restart'
         else:
             # No report was found or there was an error
             logger.my_logger.error("Could not get any report")
@@ -269,10 +277,3 @@ def main(file_path):
         logger.my_logger.info("No virus was detected")
         print("No virus was detected")
         sys.exit(0)
-        
-        
-        
-        
-if __name__ == "__main__":
-    file_path = "E:\\Downloads\\1wWJvm"
-    main(file_path)

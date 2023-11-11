@@ -13,7 +13,7 @@ handler = logging.FileHandler('app.log')
 handler.setLevel(logging.DEBUG)
 
 # Create a formatter
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s - %(filename)s:%(lineno)d')
 
 # Set the formatter for the handler
 handler.setFormatter(formatter)
