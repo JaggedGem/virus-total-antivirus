@@ -10,7 +10,7 @@ import subprocess
 
 
 # Define the VirusTotal API key
-api_key = "6d17bb9fc51673c5d2c73720c7fba28db7be9c4ea818534e0e77c0b7b3ec3649" # api_key
+api_key = "Your API Key" # api_key
 
 # Define the headers for the request
 headers = {"x-apikey": api_key}
